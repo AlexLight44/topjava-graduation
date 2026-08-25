@@ -5,32 +5,34 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.h2.engine.User;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "dish", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"restaurant_id", "date", "name"}, name = "uk_dish_restaurant_date_name")
+@Table(name = "vote", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "date"}, name = "uk_vote_user_date")
 })
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Dish extends NamedEntity{
-
-    @Column(name = "price", nullable = false)
-    private int price;
+public class Vote extends BaseEntity{
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id" , nullable = false)
     private Restaurant restaurant;
 
-    public Dish(Integer id, String name, int price, LocalDate date, Restaurant restaurant) {
-        super(id, name);
-        this.price = price;
+    public Vote(Integer id, LocalDate date, User user, Restaurant restaurant) {
+        super(id);
         this.date = date;
+        this.user = user;
         this.restaurant = restaurant;
     }
 }
