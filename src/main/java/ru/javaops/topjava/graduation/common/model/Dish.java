@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Dish extends NamedEntity{
+public class Dish extends NamedEntity {
 
     @Column(name = "price", nullable = false)
     private int price;

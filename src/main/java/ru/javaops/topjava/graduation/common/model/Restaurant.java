@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Restaurant extends NamedEntity{
+public class Restaurant extends NamedEntity {
 
     public Restaurant(Integer id, String name) {
         super(id, name);

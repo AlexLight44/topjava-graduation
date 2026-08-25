@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Vote extends BaseEntity{
+public class Vote extends BaseEntity {
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
@@ -26,7 +26,7 @@ public class Vote extends BaseEntity{
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id" , nullable = false)
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     public Vote(Integer id, LocalDate date, User user, Restaurant restaurant) {
