@@ -1,10 +1,19 @@
 package ru.javaops.topjava.graduation.common.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import ru.javaops.topjava.graduation.common.model.Dish;
+import ru.javaops.topjava.graduation.common.model.Restaurant;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface DishRepository extends JpaRepository<Dish, Integer> {
 
-    public Dish findDishesByRestaurant();
+    List<Dish> findByRestaurantAndDate(Restaurant restaurant, LocalDate date);
+
+    List<Dish> findByRestaurantIdAndDate(Integer restaurantId, LocalDate date);
+
+    List<Dish> findByRestaurantIdAndDateOrderByName(Integer restaurantId, LocalDate date);
+
+    void deleteByRestaurantIdAndDate(Integer restaurantId, LocalDate date);
 }
