@@ -9,11 +9,5 @@ import java.util.List;
 
 public interface DishRepository extends JpaRepository<Dish, Integer> {
 
-    List<Dish> findByRestaurantAndDate(Restaurant restaurant, LocalDate date);
-
     List<Dish> findByRestaurantIdAndDate(Integer restaurantId, LocalDate date);
-
-    List<Dish> findByRestaurantIdAndDateOrderByName(Integer restaurantId, LocalDate date);
-
-    void deleteByRestaurantIdAndDate(Integer restaurantId, LocalDate date);
 }

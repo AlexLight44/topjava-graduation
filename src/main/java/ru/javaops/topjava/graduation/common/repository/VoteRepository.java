@@ -11,8 +11,4 @@ import java.util.Optional;
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
     Optional<Vote> findByUserAndDate(User user, LocalDate date);
-
-    Optional<Vote> findByUserIdAndDate(Integer userId, LocalDate date);
-
-    boolean existsByUserIdAndDate(Integer userId, LocalDate date);
 }
