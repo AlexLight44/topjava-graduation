@@ -2,6 +2,7 @@ package ru.javaops.topjava.graduation.common.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.topjava.graduation.common.error.NotFoundException;
 import ru.javaops.topjava.graduation.common.model.Restaurant;
 import ru.javaops.topjava.graduation.common.model.User;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class VoteService {
 
     public static final LocalTime DEADLINE = LocalTime.of(11, 0);
@@ -22,6 +24,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;
 
+    @Transactional
     public Vote vote(User user, int restaurantId) {
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId)

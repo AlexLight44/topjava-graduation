@@ -35,4 +35,8 @@ public class User extends NamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    public boolean hasRole(Role role) {
+        return roles.contains(role);
+    }
+
 }
