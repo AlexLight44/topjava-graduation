@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javaops.topjava.graduation.common.model.Vote;
+import ru.javaops.topjava.graduation.common.to.VoteTo;
 import ru.javaops.topjava.graduation.testutil.AbstractControllerTest;
 
 import java.time.Clock;
@@ -43,15 +43,15 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void vote() throws Exception {
-        Vote newVote = getNew();
+        VoteTo newVote = getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT1_ID)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.restaurant.id").value(RESTAURANT1_ID));
+                .andExpect(jsonPath("$.restaurantId").value(RESTAURANT1_ID));
 
-        Vote created = VOTE_MATCHER.readFromJson(action);
-        newVote.setId(created.id());
+        VoteTo created = VOTE_MATCHER.readFromJson(action);
+        newVote.setId(created.getId());
         VOTE_MATCHER.assertMatch(created, newVote);
     }
 
@@ -60,13 +60,13 @@ class VoteControllerTest extends AbstractControllerTest {
     void changeVoteBeforeDeadline() throws Exception {
         ResultActions first = perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT1_ID)))
                 .andExpect(status().isOk());
-        Vote created = VOTE_MATCHER.readFromJson(first);
+        VoteTo created = VOTE_MATCHER.readFromJson(first);
 
         perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT2_ID)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(created.id()))
-                .andExpect(jsonPath("$.restaurant.id").value(RESTAURANT2_ID));
+                .andExpect(jsonPath("$.id").value(created.getId()))
+                .andExpect(jsonPath("$.restaurantId").value(RESTAURANT2_ID));
     }
 
     @Test

@@ -12,29 +12,30 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "dish", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"restaurant_id", "date", "name"}, name = "uk_dish_restaurant_date_name")
+        @UniqueConstraint(columnNames = {"restaurant_id", "menu_date", "name"}, name = "uk_dish_restaurant_menu_date_name")
 })
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Dish extends NamedEntity {
 
+    /** Price in minor currency units (kopecks). */
     @Column(name = "price", nullable = false)
     @Min(1)
     private int price;
 
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
+    @Column(name = "menu_date", nullable = false)
+    private LocalDate menuDate;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    public Dish(Integer id, String name, int price, LocalDate date, Restaurant restaurant) {
+    public Dish(Integer id, String name, int price, LocalDate menuDate, Restaurant restaurant) {
         super(id, name);
         this.price = price;
-        this.date = date;
+        this.menuDate = menuDate;
         this.restaurant = restaurant;
     }
 }

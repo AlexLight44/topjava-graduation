@@ -1,8 +1,10 @@
 package ru.javaops.topjava.graduation.common.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javaops.topjava.graduation.common.error.DataConflictException;
 import ru.javaops.topjava.graduation.common.error.NotFoundException;
 import ru.javaops.topjava.graduation.common.model.Dish;
 import ru.javaops.topjava.graduation.common.model.Restaurant;
@@ -10,6 +12,7 @@ import ru.javaops.topjava.graduation.common.repository.DishRepository;
 import ru.javaops.topjava.graduation.common.repository.RestaurantRepository;
 import ru.javaops.topjava.graduation.common.validation.ValidationUtil;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,26 +23,60 @@ public class DishService {
 
     private final DishRepository dishRepository;
     private final RestaurantRepository restaurantRepository;
+    private final Clock clock;
 
-    public List<Dish> getMenu(int restaurantId, LocalDate date) {
-        return dishRepository.findByRestaurantIdAndDateOrderByName(restaurantId, date);
+    public List<Dish> getMenu(int restaurantId, LocalDate menuDate) {
+        return dishRepository.findByRestaurantIdAndMenuDateOrderByName(restaurantId, menuDate);
     }
 
     public List<Dish> getTodayMenu(int restaurantId) {
-        return getMenu(restaurantId, LocalDate.now());
+        return getMenu(restaurantId, LocalDate.now(clock));
     }
 
     @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
     public Dish create(Dish dish, int restaurantId) {
         ValidationUtil.checkNew(dish);
-
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + " not found"));
-        dish.setRestaurant(restaurant);
-
-        if (dish.getDate() == null) {
-            dish.setDate(LocalDate.now());
+        dish.setRestaurant(getRestaurant(restaurantId));
+        if (dish.getMenuDate() == null) {
+            dish.setMenuDate(LocalDate.now(clock));
         }
         return dishRepository.save(dish);
+    }
+
+    @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public void update(Dish dish, int id, int restaurantId) {
+        ValidationUtil.assureIdConsistent(dish, id);
+        Restaurant restaurant = getRestaurant(restaurantId);
+        Dish db = get(id);
+        if (!db.getRestaurant().getId().equals(restaurantId)) {
+            throw new DataConflictException("Dish id=" + id + " doesn't belong to restaurant id=" + restaurantId);
+        }
+        dish.setRestaurant(restaurant);
+        if (dish.getMenuDate() == null) {
+            dish.setMenuDate(db.getMenuDate());
+        }
+        dishRepository.save(dish);
+    }
+
+    @Transactional
+    @CacheEvict(value = "restaurants", allEntries = true)
+    public void delete(int id, int restaurantId) {
+        Dish db = get(id);
+        if (!db.getRestaurant().getId().equals(restaurantId)) {
+            throw new DataConflictException("Dish id=" + id + " doesn't belong to restaurant id=" + restaurantId);
+        }
+        dishRepository.deleteById(id);
+    }
+
+    private Dish get(int id) {
+        return dishRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Dish id=" + id + " not found"));
+    }
+
+    private Restaurant getRestaurant(int restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + " not found"));
     }
 }

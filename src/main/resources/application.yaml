@@ -16,7 +16,7 @@ spring:
         jdbc.batch_size: 20
   datasource:
     # ImMemory
-    url: jdbc:h2:mem:bootjava
+    url: jdbc:h2:mem:graduation
     #    tcp: jdbc:h2:tcp://localhost:9092/mem:bootjava
     # Absolute path
     #    url: jdbc:h2:C:/projects/bootjava/db/bootjava
@@ -38,13 +38,13 @@ spring:
 
   # https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties-cache
   cache:
-    cache-names: users
-    caffeine.spec: maximumSize=5000,expireAfterAccess=60s
+    cache-names: restaurants
+    caffeine.spec: maximumSize=1,expireAfterAccess=60s
 
 logging:
   level:
     root: WARN
-    ru.javaops.bootjava: DEBUG
+    ru.javaops.topjava.graduation: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 server.servlet:

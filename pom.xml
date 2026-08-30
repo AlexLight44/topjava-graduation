@@ -12,7 +12,7 @@
     <artifactId>graduation</artifactId>
     <version>1.0</version>
     <name>Graduation</name>
-    <description>Spring Boot 3.x HATEOAS application (Graduation)</description>
+    <description>Restaurant voting REST API</description>
     <url>https://javaops.ru/view/graduation</url>
 
     <properties>

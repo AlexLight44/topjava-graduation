@@ -34,4 +34,16 @@ public class AdminDishController {
     public Dish create(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
         return dishService.create(dish, restaurantId);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@Valid @RequestBody Dish dish, @PathVariable int restaurantId, @PathVariable int id) {
+        dishService.update(dish, id, restaurantId);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int restaurantId, @PathVariable int id) {
+        dishService.delete(id, restaurantId);
+    }
 }

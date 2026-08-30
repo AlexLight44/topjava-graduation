@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.javaops.topjava.graduation.app.AuthUser;
-import ru.javaops.topjava.graduation.common.model.Vote;
 import ru.javaops.topjava.graduation.common.service.VoteService;
+import ru.javaops.topjava.graduation.common.to.VoteTo;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,13 +20,13 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping("/api/restaurants/{restaurantId}/votes")
-    public Vote vote(@AuthenticationPrincipal AuthUser authUser,
-                     @PathVariable int restaurantId) {
+    public VoteTo vote(@AuthenticationPrincipal AuthUser authUser,
+                       @PathVariable int restaurantId) {
         return voteService.vote(authUser.getUser(), restaurantId);
     }
 
     @GetMapping(REST_URL + "/today")
-    public ResponseEntity<Vote> getToday(@AuthenticationPrincipal AuthUser authUser) {
+    public ResponseEntity<VoteTo> getToday(@AuthenticationPrincipal AuthUser authUser) {
         return ResponseEntity.of(voteService.getTodayVote(authUser.getUser()));
     }
 }

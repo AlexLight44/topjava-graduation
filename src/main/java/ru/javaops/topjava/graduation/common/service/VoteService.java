@@ -10,6 +10,7 @@ import ru.javaops.topjava.graduation.common.model.User;
 import ru.javaops.topjava.graduation.common.model.Vote;
 import ru.javaops.topjava.graduation.common.repository.RestaurantRepository;
 import ru.javaops.topjava.graduation.common.repository.VoteRepository;
+import ru.javaops.topjava.graduation.common.to.VoteTo;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -28,15 +29,14 @@ public class VoteService {
     private final Clock clock;
 
     @Transactional
-    public Vote vote(User user, int restaurantId) {
-
+    public VoteTo vote(User user, int restaurantId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + " not found"));
 
         LocalDate today = LocalDate.now(clock);
         LocalTime now = LocalTime.now(clock);
 
-        Optional<Vote> existingVote = voteRepository.findByUserAndDate(user, today);
+        Optional<Vote> existingVote = voteRepository.findByUserAndVoteDate(user, today);
 
         if (existingVote.isPresent()) {
             if (now.isAfter(DEADLINE)) {
@@ -44,12 +44,16 @@ public class VoteService {
             }
             Vote vote = existingVote.get();
             vote.setRestaurant(restaurant);
-            return voteRepository.save(vote);
+            return toTo(voteRepository.save(vote));
         }
-        return voteRepository.save(new Vote(null, today, user, restaurant));
+        return toTo(voteRepository.save(new Vote(null, today, user, restaurant)));
     }
 
-    public Optional<Vote> getTodayVote(User user) {
-        return voteRepository.findByUserAndDate(user, LocalDate.now(clock));
+    public Optional<VoteTo> getTodayVote(User user) {
+        return voteRepository.findByUserAndVoteDate(user, LocalDate.now(clock)).map(VoteService::toTo);
+    }
+
+    private static VoteTo toTo(Vote vote) {
+        return new VoteTo(vote.getId(), vote.getVoteDate(), vote.getRestaurant().getId());
     }
 }
