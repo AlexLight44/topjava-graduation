@@ -15,6 +15,7 @@ import org.springframework.http.ProblemDetail;
 import ru.javaops.topjava.graduation.common.util.JsonUtil;
 
 import java.sql.SQLException;
+import java.time.Clock;
 import java.util.Map;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
@@ -25,6 +26,11 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 @EnableCaching
 public class AppConfig {
 
+    @Bean
+    Clock clock() {
+        return Clock.systemDefaultZone();
+    }
+
     @Profile("!test")
     @Bean(initMethod = "start", destroyMethod = "stop")
     Server h2Server() throws SQLException {
@@ -32,7 +38,6 @@ public class AppConfig {
         return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
     }
 
-    //   https://stackoverflow.com/a/74630129/548473
     @JsonAutoDetect(fieldVisibility = NONE, getterVisibility = ANY)
     interface MixIn {
         @JsonAnyGetter
@@ -42,7 +47,6 @@ public class AppConfig {
     @Autowired
     void configureAndStoreObjectMapper(ObjectMapper objectMapper) {
         objectMapper.registerModule(new Hibernate5JakartaModule());
-        // ErrorHandling: https://stackoverflow.com/questions/7421474/548473
         objectMapper.addMixIn(ProblemDetail.class, MixIn.class);
         JsonUtil.setMapper(objectMapper);
     }

@@ -29,7 +29,7 @@ public class RestaurantService {
     }
 
     public List<Restaurant> getAll() {
-        return restaurantRepository.findAll();
+        return restaurantRepository.findAllByOrderByName();
     }
 
     @Transactional

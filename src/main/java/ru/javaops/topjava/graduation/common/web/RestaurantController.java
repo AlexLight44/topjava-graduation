@@ -13,15 +13,17 @@ import ru.javaops.topjava.graduation.common.service.RestaurantService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/restaurants")
+@RequestMapping(RestaurantController.REST_URL)
 @RequiredArgsConstructor
 public class RestaurantController {
+
+    public static final String REST_URL = "/api/restaurants";
 
     private final RestaurantService restaurantService;
     private final DishService dishService;
 
     @GetMapping
-    private List<Restaurant> getAll() {
+    public List<Restaurant> getAll() {
         return restaurantService.getAll();
     }
 

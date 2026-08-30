@@ -3,6 +3,7 @@ package ru.javaops.topjava.graduation.common.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javaops.topjava.graduation.common.error.DataConflictException;
 import ru.javaops.topjava.graduation.common.error.NotFoundException;
 import ru.javaops.topjava.graduation.common.model.Restaurant;
 import ru.javaops.topjava.graduation.common.model.User;
@@ -10,6 +11,7 @@ import ru.javaops.topjava.graduation.common.model.Vote;
 import ru.javaops.topjava.graduation.common.repository.RestaurantRepository;
 import ru.javaops.topjava.graduation.common.repository.VoteRepository;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
@@ -23,6 +25,7 @@ public class VoteService {
 
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;
+    private final Clock clock;
 
     @Transactional
     public Vote vote(User user, int restaurantId) {
@@ -30,14 +33,14 @@ public class VoteService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + " not found"));
 
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
+        LocalDate today = LocalDate.now(clock);
+        LocalTime now = LocalTime.now(clock);
 
         Optional<Vote> existingVote = voteRepository.findByUserAndDate(user, today);
 
         if (existingVote.isPresent()) {
             if (now.isAfter(DEADLINE)) {
-                throw new IllegalStateException("Vote cannot be changed after 11:00");
+                throw new DataConflictException("Vote cannot be changed after 11:00");
             }
             Vote vote = existingVote.get();
             vote.setRestaurant(restaurant);
@@ -46,8 +49,7 @@ public class VoteService {
         return voteRepository.save(new Vote(null, today, user, restaurant));
     }
 
-    public Vote getTodayVote(User user) {
-        return voteRepository.findByUserAndDate(user, LocalDate.now())
-                .orElseThrow(() -> new NotFoundException("Vote for today not found"));
+    public Optional<Vote> getTodayVote(User user) {
+        return voteRepository.findByUserAndDate(user, LocalDate.now(clock));
     }
 }

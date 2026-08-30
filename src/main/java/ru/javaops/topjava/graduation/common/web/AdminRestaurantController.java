@@ -10,9 +10,11 @@ import ru.javaops.topjava.graduation.common.service.RestaurantService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/restaurants")
+@RequestMapping(AdminRestaurantController.REST_URL)
 @RequiredArgsConstructor
 public class AdminRestaurantController {
+
+    public static final String REST_URL = "/api/admin/restaurants";
 
     private final RestaurantService restaurantService;
 
@@ -32,7 +34,7 @@ public class AdminRestaurantController {
         return restaurantService.create(restaurant);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         restaurantService.update(restaurant, id);

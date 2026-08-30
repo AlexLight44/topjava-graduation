@@ -22,7 +22,7 @@ public class DishService {
     private final RestaurantRepository restaurantRepository;
 
     public List<Dish> getMenu(int restaurantId, LocalDate date) {
-        return dishRepository.findByRestaurantIdAndDate(restaurantId, date);
+        return dishRepository.findByRestaurantIdAndDateOrderByName(restaurantId, date);
     }
 
     public List<Dish> getTodayMenu(int restaurantId) {

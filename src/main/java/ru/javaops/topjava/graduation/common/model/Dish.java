@@ -1,6 +1,8 @@
 package ru.javaops.topjava.graduation.common.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +20,13 @@ import java.time.LocalDate;
 public class Dish extends NamedEntity {
 
     @Column(name = "price", nullable = false)
+    @Min(1)
     private int price;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;

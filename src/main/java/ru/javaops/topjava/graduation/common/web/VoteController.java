@@ -1,6 +1,7 @@
 package ru.javaops.topjava.graduation.common.web;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import ru.javaops.topjava.graduation.common.service.VoteService;
 @RequiredArgsConstructor
 public class VoteController {
 
+    public static final String REST_URL = "/api/votes";
+
     private final VoteService voteService;
 
     @PostMapping("/api/restaurants/{restaurantId}/votes")
@@ -22,10 +25,8 @@ public class VoteController {
         return voteService.vote(authUser.getUser(), restaurantId);
     }
 
-    @GetMapping("/api/votes/today")
-    public Vote getToday(@AuthenticationPrincipal AuthUser authUser) {
-        return voteService.getTodayVote(authUser.getUser());
+    @GetMapping(REST_URL + "/today")
+    public ResponseEntity<Vote> getToday(@AuthenticationPrincipal AuthUser authUser) {
+        return ResponseEntity.of(voteService.getTodayVote(authUser.getUser()));
     }
-
-
 }
