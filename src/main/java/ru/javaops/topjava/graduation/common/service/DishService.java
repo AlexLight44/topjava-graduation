@@ -42,30 +42,4 @@ public class DishService {
         }
         return dishRepository.save(dish);
     }
-
-    public Dish get(int id) {
-        return dishRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Dish id=" + id + " no found"));
-    }
-
-    @Transactional
-    public void update(Dish dish, int id, int restaurantId) {
-        ValidationUtil.assureIdConsistent(dish, id);
-
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + "not found"));
-
-        dish.setRestaurant(restaurant);
-
-        if (dish.getDate() == null) {
-            dish.setDate(LocalDate.now());
-        }
-
-        dishRepository.save(dish);
-    }
-
-    @Transactional
-    public void delete(int id) {
-        dishRepository.deleteById(id);
-    }
 }

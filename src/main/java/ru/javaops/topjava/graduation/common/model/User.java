@@ -39,10 +39,6 @@ public class User extends NamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    public User(User u) {
-        this(u.id, u.name, u.email, u.password, u.enabled, u.roles);
-    }
-
     public User(Integer id, String name, String email, String password, Role... roles) {
         this(id, name, email, password, true, Set.of(roles));
     }
@@ -53,9 +49,5 @@ public class User extends NamedEntity {
         this.password = password;
         this.enabled = enabled;
         this.roles = roles.isEmpty() ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
-    }
-
-    public boolean hasRole(Role role) {
-        return roles != null && roles.contains(role);
     }
 }
