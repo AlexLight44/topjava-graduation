@@ -1,7 +1,7 @@
 package ru.javaops.topjava.graduation.testutil;
 
-import ru.javaops.topjava.graduation.common.model.Dish;
-import ru.javaops.topjava.graduation.common.to.DishTo;
+import ru.javaops.topjava.graduation.model.Dish;
+import ru.javaops.topjava.graduation.to.DishTo;
 
 import java.time.LocalDate;
 

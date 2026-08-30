@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javaops.topjava.graduation.common.to.VoteTo;
+import ru.javaops.topjava.graduation.to.VoteTo;
 import ru.javaops.topjava.graduation.testutil.AbstractControllerTest;
 
 import java.time.Clock;

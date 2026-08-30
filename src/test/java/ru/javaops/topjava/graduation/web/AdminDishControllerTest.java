@@ -6,9 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javaops.topjava.graduation.common.model.Dish;
-import ru.javaops.topjava.graduation.common.repository.DishRepository;
-import ru.javaops.topjava.graduation.common.util.JsonUtil;
+import ru.javaops.topjava.graduation.model.Dish;
+import ru.javaops.topjava.graduation.repository.DishRepository;
+import ru.javaops.topjava.graduation.util.JsonUtil;
 import ru.javaops.topjava.graduation.testutil.AbstractControllerTest;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

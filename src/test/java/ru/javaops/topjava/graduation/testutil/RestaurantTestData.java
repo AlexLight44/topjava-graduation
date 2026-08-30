@@ -1,7 +1,7 @@
 package ru.javaops.topjava.graduation.testutil;
 
-import ru.javaops.topjava.graduation.common.model.Restaurant;
-import ru.javaops.topjava.graduation.common.to.RestaurantTo;
+import ru.javaops.topjava.graduation.model.Restaurant;
+import ru.javaops.topjava.graduation.to.RestaurantTo;
 
 public class RestaurantTestData {
     public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class);

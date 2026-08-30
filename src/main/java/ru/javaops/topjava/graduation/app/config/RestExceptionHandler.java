@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import ru.javaops.topjava.graduation.common.error.AppException;
-import ru.javaops.topjava.graduation.common.error.ErrorType;
+import ru.javaops.topjava.graduation.error.AppException;
+import ru.javaops.topjava.graduation.error.ErrorType;
 
 import java.io.FileNotFoundException;
 import java.net.URI;
@@ -35,7 +35,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static ru.javaops.topjava.graduation.common.error.ErrorType.*;
+import static ru.javaops.topjava.graduation.error.ErrorType.*;
 
 @RestControllerAdvice
 @AllArgsConstructor

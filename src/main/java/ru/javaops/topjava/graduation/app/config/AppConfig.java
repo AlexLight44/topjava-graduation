@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ProblemDetail;
-import ru.javaops.topjava.graduation.common.util.JsonUtil;
+import ru.javaops.topjava.graduation.util.JsonUtil;
 
 import java.sql.SQLException;
 import java.time.Clock;

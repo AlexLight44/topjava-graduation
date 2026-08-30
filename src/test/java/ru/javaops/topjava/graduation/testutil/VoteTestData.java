@@ -1,6 +1,6 @@
 package ru.javaops.topjava.graduation.testutil;
 
-import ru.javaops.topjava.graduation.common.to.VoteTo;
+import ru.javaops.topjava.graduation.to.VoteTo;
 
 import java.time.LocalDate;
 

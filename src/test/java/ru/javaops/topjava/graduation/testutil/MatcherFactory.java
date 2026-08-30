@@ -3,7 +3,7 @@ package ru.javaops.topjava.graduation.testutil;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
-import ru.javaops.topjava.graduation.common.util.JsonUtil;
+import ru.javaops.topjava.graduation.util.JsonUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;

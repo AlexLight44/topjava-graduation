@@ -1,7 +1,7 @@
 package ru.javaops.topjava.graduation.testutil;
 
-import ru.javaops.topjava.graduation.common.model.Role;
-import ru.javaops.topjava.graduation.common.model.User;
+import ru.javaops.topjava.graduation.model.Role;
+import ru.javaops.topjava.graduation.model.User;
 
 public class UserTestData {
 

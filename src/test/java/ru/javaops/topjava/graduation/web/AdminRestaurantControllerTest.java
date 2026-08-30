@@ -6,10 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javaops.topjava.graduation.common.model.Restaurant;
-import ru.javaops.topjava.graduation.common.repository.RestaurantRepository;
-import ru.javaops.topjava.graduation.common.util.JsonUtil;
-import ru.javaops.topjava.graduation.common.web.AdminRestaurantController;
+import ru.javaops.topjava.graduation.model.Restaurant;
+import ru.javaops.topjava.graduation.repository.RestaurantRepository;
+import ru.javaops.topjava.graduation.util.JsonUtil;
+import ru.javaops.topjava.graduation.web.AdminRestaurantController;
 import ru.javaops.topjava.graduation.testutil.AbstractControllerTest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

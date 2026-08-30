@@ -14,9 +14,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.javaops.topjava.graduation.app.AuthUser;
-import ru.javaops.topjava.graduation.common.model.Role;
-import ru.javaops.topjava.graduation.common.model.User;
-import ru.javaops.topjava.graduation.common.repository.UserRepository;
+import ru.javaops.topjava.graduation.model.Role;
+import ru.javaops.topjava.graduation.model.User;
+import ru.javaops.topjava.graduation.repository.UserRepository;
 
 import java.util.Optional;
 

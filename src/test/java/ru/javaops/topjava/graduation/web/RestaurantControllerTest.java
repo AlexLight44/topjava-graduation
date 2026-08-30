@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javaops.topjava.graduation.common.to.RestaurantTo;
+import ru.javaops.topjava.graduation.to.RestaurantTo;
 import ru.javaops.topjava.graduation.testutil.AbstractControllerTest;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javaops.topjava.graduation.common.web.RestaurantController.REST_URL;
+import static ru.javaops.topjava.graduation.web.RestaurantController.REST_URL;
 import static ru.javaops.topjava.graduation.testutil.DishTestData.caesarSaladTo;
 import static ru.javaops.topjava.graduation.testutil.DishTestData.misoSoupTo;
 import static ru.javaops.topjava.graduation.testutil.DishTestData.philadelphiaTo;
