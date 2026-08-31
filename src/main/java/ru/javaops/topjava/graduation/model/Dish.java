@@ -1,6 +1,7 @@
 package ru.javaops.topjava.graduation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
@@ -19,11 +20,12 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Dish extends NamedEntity {
 
-    /** Price in minor currency units (kopecks). */
+    @Schema(description = "Price in kopecks", example = "500")
     @Column(name = "price", nullable = false)
     @Min(1)
     private int price;
 
+    @Schema(accessMode = Schema.AccessMode.READ_WRITE, example = "2026-08-31")
     @Column(name = "menu_date", nullable = false)
     private LocalDate menuDate;
 

@@ -2,7 +2,6 @@ package ru.javaops.topjava.graduation.app.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
@@ -19,16 +18,16 @@ import org.springframework.context.annotation.Configuration;
 )
 @OpenAPIDefinition(
         info = @Info(
-                title = "REST API documentation",
+                title = "Restaurant Voting REST API",
                 version = "1.0",
                 description = """
-                        Приложение по <a href='https://javaops.ru/view/bootjava'>курсу BootJava</a>
-                        <p><b>Тестовые креденшелы:</b><br>
+                        Lunch voting system.
+                        <a href='https://github.com/JavaWebinar/topjava/blob/doc/doc/graduation.md'>Requirements</a>
+                        <p>Users vote for a restaurant for today. A vote can be changed until 11:00.</p>
+                        <p><b>Credentials:</b><br>
                         - user@yandex.ru / password<br>
-                        - admin@gmail.com / admin<br>
-                        - guest@gmail.com / guest</p>
-                        """,
-                contact = @Contact(url = "https://javaops.ru/#contacts", name = "Grigory Kislin", email = "admin@javaops.ru")
+                        - admin@gmail.com / admin</p>
+                        """
         ),
         security = @SecurityRequirement(name = "basicAuth")
 )

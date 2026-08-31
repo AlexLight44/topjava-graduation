@@ -1,19 +1,60 @@
-<img src="http://javaops.ru/static/img/logo/javaops_30.png" width="223"/>
+# Restaurant Voting System
 
-Открытый курс для всех желающих приобщиться к живой современной разработке на Java
-# [Разработка Spring Boot 3.x HATEOAS приложения (BootJava)](http://javaops.ru/view/bootjava?ref=gh)
-## [Программа](http://javaops.ru/view/bootjava#program)
+[Technical requirements](https://github.com/JavaWebinar/topjava/blob/doc/doc/graduation.md)
 
-### Java приложения на самом современном и востребованном стеке: Spring Boot 3.x, Spring Data Rest/HATEOAS, Lombok, JPA, H2, ....
-Мы создадим с нуля основу любого современного REST веб-приложения: аутентификация и авторизация на основе ролей, регистрация пользователя в приложении, управление своим профилем и администрирование пользователей.
--------------------------------------------------------------
-- Stack: [JDK 17](http://jdk.java.net/17/), Spring Boot 3.x, Lombok, H2, Caffeine Cache, SpringDoc OpenApi 2.x
-- Run: `mvn spring-boot:run` in root directory.
------------------------------------------------------
-[REST API documentation](http://localhost:8080/)
-Креденшелы:
+REST API for deciding where to have lunch. No frontend.
+
+- Users vote for a restaurant for today (one vote per user per day).
+- A vote can be changed until 11:00; after that it is final.
+- Admins manage restaurants and daily menus (dish name + price in kopecks).
+
+## Stack
+
+JDK 21, Spring Boot 3.3, Spring Data JPA, Spring Security, H2, Caffeine, SpringDoc OpenAPI 2.x
+
+## Run
+
+```
+mvn spring-boot:run
+```
+
+## API documentation
+
+[Swagger UI](http://localhost:8080/) — Authorize with Basic Auth.
+
 ```
 User:  user@yandex.ru / password
 Admin: admin@gmail.com / admin
-Guest: guest@gmail.com / guest
+```
+
+## curl
+
+Restaurants with today's menus:
+
+```
+curl -u user@yandex.ru:password http://localhost:8080/api/restaurants
+```
+
+Vote (changeable until 11:00):
+
+```
+curl -u user@yandex.ru:password -X POST http://localhost:8080/api/restaurants/1/votes
+```
+
+Today's vote:
+
+```
+curl -u user@yandex.ru:password http://localhost:8080/api/votes/today
+```
+
+Create restaurant (admin):
+
+```
+curl -u admin@gmail.com:admin -H "Content-Type: application/json" -d "{\"name\":\"New Place\"}" http://localhost:8080/api/admin/restaurants
+```
+
+Add a dish for today (admin):
+
+```
+curl -u admin@gmail.com:admin -H "Content-Type: application/json" -d "{\"name\":\"Tiramisu\",\"price\":350}" http://localhost:8080/api/admin/restaurants/1/dishes
 ```

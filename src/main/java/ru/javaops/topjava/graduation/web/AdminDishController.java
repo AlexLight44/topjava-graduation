@@ -1,5 +1,7 @@
 package ru.javaops.topjava.graduation.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(AdminDishController.REST_URL)
 @RequiredArgsConstructor
+@Tag(name = "Admin dish")
 public class AdminDishController {
 
     public static final String REST_URL = "/api/admin/restaurants/{restaurantId}/dishes";
@@ -22,6 +25,7 @@ public class AdminDishController {
     private final DishService dishService;
 
     @GetMapping
+    @Operation(summary = "Get restaurant menu for a date (today if omitted)")
     public List<Dish> getMenu(@PathVariable int restaurantId,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                               Optional<LocalDate> date) {
@@ -31,18 +35,21 @@ public class AdminDishController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create dish (menuDate defaults to today)")
     public Dish create(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
         return dishService.create(dish, restaurantId);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Update dish")
     public void update(@Valid @RequestBody Dish dish, @PathVariable int restaurantId, @PathVariable int id) {
         dishService.update(dish, id, restaurantId);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete dish")
     public void delete(@PathVariable int restaurantId, @PathVariable int id) {
         dishService.delete(id, restaurantId);
     }
