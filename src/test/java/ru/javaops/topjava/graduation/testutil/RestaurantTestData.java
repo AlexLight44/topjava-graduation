@@ -12,10 +12,6 @@ public class RestaurantTestData {
     public static final int RESTAURANT3_ID = 3;
     public static final int NOT_FOUND = 100;
 
-    public static final Restaurant restaurant1 = new Restaurant(RESTAURANT1_ID, "Italian Place");
-    public static final Restaurant restaurant2 = new Restaurant(RESTAURANT2_ID, "Sushi City");
-    public static final Restaurant restaurant3 = new Restaurant(RESTAURANT3_ID, "Burger House");
-
     public static Restaurant getNew() {
         return new Restaurant(null, "New Restaurant");
     }

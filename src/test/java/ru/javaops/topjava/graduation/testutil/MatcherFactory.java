@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MatcherFactory {
 
-    public static <T> Matcher<T> usingAssertions(Class<T> clazz, BiConsumer<T, T> assertion, BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion) {
+    private static <T> Matcher<T> usingAssertions(Class<T> clazz, BiConsumer<T, T> assertion, BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion) {
         return new Matcher<>(clazz, assertion, iterableAssertion);
     }
 
@@ -36,11 +36,6 @@ public class MatcherFactory {
 
         public void assertMatch(T actual, T expected) {
             assertion.accept(actual, expected);
-        }
-
-        @SafeVarargs
-        public final void assertMatch(Iterable<T> actual, T... expected) {
-            assertMatch(actual, List.of(expected));
         }
 
         public void assertMatch(Iterable<T> actual, Iterable<T> expected) {
