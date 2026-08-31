@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javaops.topjava.graduation.model.Restaurant;
 import ru.javaops.topjava.graduation.repository.RestaurantRepository;
 import ru.javaops.topjava.graduation.util.JsonUtil;
-import ru.javaops.topjava.graduation.web.AdminRestaurantController;
 import ru.javaops.topjava.graduation.testutil.AbstractControllerTest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
