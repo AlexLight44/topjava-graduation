@@ -1,0 +1,18 @@
+package com.github.alexlight44.restaurantvoting.to;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class DishTo {
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private Integer id;
+    private String name;
+    private int price;
+}

@@ -28,7 +28,7 @@ spring:
 logging:
   level:
     root: WARN
-    ru.javaops.topjava.graduation: DEBUG
+    com.github.alexlight44.restaurantvoting: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 server.servlet:
