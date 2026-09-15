@@ -15,6 +15,7 @@ import ru.javaops.topjava.graduation.to.VoteTo;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -57,6 +58,12 @@ public class VoteService {
 
     public Optional<VoteTo> getTodayVote(User user) {
         return voteRepository.findByUserAndVoteDate(user, LocalDate.now(clock)).map(VoteService::toTo);
+    }
+
+    public List<VoteTo> getAll(User user) {
+        return voteRepository.findAllByUserOrderByVoteDateDesc(user).stream()
+                .map(VoteService::toTo)
+                .toList();
     }
 
     private static VoteTo toTo(Vote vote) {

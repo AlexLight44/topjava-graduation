@@ -38,19 +38,25 @@ curl -u user@yandex.ru:password http://localhost:8080/api/restaurants
 Vote:
 
 ```
-curl -u user@yandex.ru:password -X POST http://localhost:8080/api/restaurants/1/votes
+curl -u user@yandex.ru:password -H "Content-Type: application/json" -d "{\"restaurantId\":1}" -X POST http://localhost:8080/api/votes
 ```
 
 Change vote (until 11:00):
 
 ```
-curl -u user@yandex.ru:password -X PUT "http://localhost:8080/api/votes/today?restaurantId=2"
+curl -u user@yandex.ru:password -H "Content-Type: application/json" -d "{\"restaurantId\":2}" -X PUT http://localhost:8080/api/votes/today
 ```
 
 Today's vote:
 
 ```
 curl -u user@yandex.ru:password http://localhost:8080/api/votes/today
+```
+
+Vote history:
+
+```
+curl -u user@yandex.ru:password http://localhost:8080/api/votes
 ```
 
 Create restaurant (admin):
