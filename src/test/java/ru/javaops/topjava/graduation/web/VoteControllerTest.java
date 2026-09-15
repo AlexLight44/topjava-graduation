@@ -46,7 +46,7 @@ class VoteControllerTest extends AbstractControllerTest {
         VoteTo newVote = getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT1_ID)))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.restaurantId").value(RESTAURANT1_ID));
 
@@ -57,13 +57,27 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void changeVoteBeforeDeadline() throws Exception {
-        ResultActions first = perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT1_ID)))
-                .andExpect(status().isOk());
-        VoteTo created = VOTE_MATCHER.readFromJson(first);
-
+    void voteTwice() throws Exception {
+        perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT1_ID)))
+                .andExpect(status().isCreated());
         perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT2_ID)))
                 .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void changeVoteBeforeDeadline() throws Exception {
+        ResultActions first = perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT1_ID)))
+                .andExpect(status().isCreated());
+        VoteTo created = VOTE_MATCHER.readFromJson(first);
+
+        perform(MockMvcRequestBuilders.put(VoteController.REST_URL + "/today")
+                .param("restaurantId", String.valueOf(RESTAURANT2_ID)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        perform(MockMvcRequestBuilders.get(VoteController.REST_URL + "/today"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(created.getId()))
                 .andExpect(jsonPath("$.restaurantId").value(RESTAURANT2_ID));
@@ -73,12 +87,22 @@ class VoteControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = USER_MAIL)
     void changeVoteAfterDeadline() throws Exception {
         perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT1_ID)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         setTime(LocalTime.of(11, 1));
-        perform(MockMvcRequestBuilders.post(voteUrl(RESTAURANT2_ID)))
+        perform(MockMvcRequestBuilders.put(VoteController.REST_URL + "/today")
+                .param("restaurantId", String.valueOf(RESTAURANT2_ID)))
                 .andDo(print())
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void changeVoteWhenNotVoted() throws Exception {
+        perform(MockMvcRequestBuilders.put(VoteController.REST_URL + "/today")
+                .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test

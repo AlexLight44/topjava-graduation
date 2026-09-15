@@ -3,12 +3,10 @@ package ru.javaops.topjava.graduation.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.javaops.topjava.graduation.app.AuthUser;
 import ru.javaops.topjava.graduation.service.VoteService;
 import ru.javaops.topjava.graduation.to.VoteTo;
@@ -23,10 +21,19 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping("/api/restaurants/{restaurantId}/votes")
-    @Operation(summary = "Vote for a restaurant today (changeable until 11:00)")
-    public VoteTo vote(@AuthenticationPrincipal AuthUser authUser,
-                       @PathVariable int restaurantId) {
-        return voteService.vote(authUser.getUser(), restaurantId);
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create today's vote for a restaurant")
+    public VoteTo create(@AuthenticationPrincipal AuthUser authUser,
+                         @PathVariable int restaurantId) {
+        return voteService.create(authUser.getUser(), restaurantId);
+    }
+
+    @PutMapping(REST_URL + "/today")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Change today's vote (until 11:00)")
+    public void updateToday(@AuthenticationPrincipal AuthUser authUser,
+                            @RequestParam int restaurantId) {
+        voteService.updateToday(authUser.getUser(), restaurantId);
     }
 
     @GetMapping(REST_URL + "/today")

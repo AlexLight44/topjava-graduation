@@ -29,24 +29,30 @@ public class VoteService {
     private final Clock clock;
 
     @Transactional
-    public VoteTo vote(User user, int restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + " not found"));
-
+    public VoteTo create(User user, int restaurantId) {
+        Restaurant restaurant = getRestaurant(restaurantId);
         LocalDate today = LocalDate.now(clock);
-        LocalTime now = LocalTime.now(clock);
-
-        Optional<Vote> existingVote = voteRepository.findByUserAndVoteDate(user, today);
-
-        if (existingVote.isPresent()) {
-            if (now.isAfter(DEADLINE)) {
-                throw new DataConflictException("Vote cannot be changed after 11:00");
-            }
-            Vote vote = existingVote.get();
-            vote.setRestaurant(restaurant);
-            return toTo(voteRepository.save(vote));
+        if (voteRepository.findByUserAndVoteDate(user, today).isPresent()) {
+            throw new DataConflictException("Vote for today already exists");
         }
         return toTo(voteRepository.save(new Vote(null, today, user, restaurant)));
+    }
+
+    @Transactional
+    public void updateToday(User user, int restaurantId) {
+        Restaurant restaurant = getRestaurant(restaurantId);
+        Vote vote = voteRepository.findByUserAndVoteDate(user, LocalDate.now(clock))
+                .orElseThrow(() -> new NotFoundException("Vote for today not found"));
+        if (LocalTime.now(clock).isAfter(DEADLINE)) {
+            throw new DataConflictException("Vote cannot be changed after 11:00");
+        }
+        vote.setRestaurant(restaurant);
+        voteRepository.save(vote);
+    }
+
+    private Restaurant getRestaurant(int restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + " not found"));
     }
 
     public Optional<VoteTo> getTodayVote(User user) {

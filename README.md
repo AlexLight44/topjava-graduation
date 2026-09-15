@@ -35,10 +35,16 @@ Restaurants with today's menus:
 curl -u user@yandex.ru:password http://localhost:8080/api/restaurants
 ```
 
-Vote (changeable until 11:00):
+Vote:
 
 ```
 curl -u user@yandex.ru:password -X POST http://localhost:8080/api/restaurants/1/votes
+```
+
+Change vote (until 11:00):
+
+```
+curl -u user@yandex.ru:password -X PUT "http://localhost:8080/api/votes/today?restaurantId=2"
 ```
 
 Today's vote:
