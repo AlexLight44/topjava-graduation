@@ -58,6 +58,17 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
+    void createDuplicate() throws Exception {
+        Restaurant duplicate = new Restaurant(null, "Italian Place");
+        perform(MockMvcRequestBuilders.post(AdminRestaurantController.REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(duplicate)))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(AdminRestaurantController.REST_URL + "/" + RESTAURANT1_ID))
                 .andDo(print())
