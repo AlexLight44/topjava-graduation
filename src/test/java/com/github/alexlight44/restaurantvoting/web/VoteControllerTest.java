@@ -2,7 +2,6 @@ package com.github.alexlight44.restaurantvoting.web;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
@@ -12,13 +11,8 @@ import com.github.alexlight44.restaurantvoting.to.VoteTo;
 import com.github.alexlight44.restaurantvoting.testutil.AbstractControllerTest;
 import com.github.alexlight44.restaurantvoting.util.JsonUtil;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,14 +29,9 @@ import static com.github.alexlight44.restaurantvoting.web.VoteController.REST_UR
 
 class VoteControllerTest extends AbstractControllerTest {
 
-    private static final ZoneId ZONE = ZoneId.systemDefault();
-
-    @MockBean
-    private Clock clock;
-
     @BeforeEach
     void setClockBeforeDeadline() {
-        setTime(LocalTime.of(10, 0));
+        clock.setTime(LocalTime.of(10, 0));
     }
 
     @Test
@@ -123,7 +112,7 @@ class VoteControllerTest extends AbstractControllerTest {
         perform(votePost(RESTAURANT1_ID))
                 .andExpect(status().isCreated());
 
-        setTime(LocalTime.of(11, 1));
+        clock.setTime(LocalTime.of(11, 1));
         perform(votePut(RESTAURANT2_ID))
                 .andDo(print())
                 .andExpect(status().isConflict());
@@ -155,11 +144,5 @@ class VoteControllerTest extends AbstractControllerTest {
         return MockMvcRequestBuilders.put(REST_URL + "/today")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(new VoteTo(null, null, restaurantId)));
-    }
-
-    private void setTime(LocalTime time) {
-        Instant instant = LocalDate.now().atTime(time).atZone(ZONE).toInstant();
-        when(clock.instant()).thenReturn(instant);
-        when(clock.getZone()).thenReturn(ZONE);
     }
 }

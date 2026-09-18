@@ -26,6 +26,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 @EnableCaching
 public class AppConfig {
 
+    @Profile("!test")
     @Bean
     Clock clock() {
         return Clock.systemDefaultZone();
