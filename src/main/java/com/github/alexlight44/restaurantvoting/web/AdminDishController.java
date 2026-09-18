@@ -36,7 +36,7 @@ public class AdminDishController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create dish (menuDate defaults to today)")
+    @Operation(summary = "Create dish")
     public Dish create(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
         ValidationUtil.checkNew(dish);
         return dishService.create(dish, restaurantId);

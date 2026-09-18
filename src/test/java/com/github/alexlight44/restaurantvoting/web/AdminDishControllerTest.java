@@ -57,6 +57,18 @@ class AdminDishControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
+    void updateWithoutMenuDate() throws Exception {
+        Dish updated = getUpdated();
+        updated.setMenuDate(null);
+        perform(MockMvcRequestBuilders.put("/api/admin/restaurants/" + RESTAURANT1_ID + "/dishes/" + DISH1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete("/api/admin/restaurants/" + RESTAURANT1_ID + "/dishes/" + DISH1_ID))
                 .andDo(print())

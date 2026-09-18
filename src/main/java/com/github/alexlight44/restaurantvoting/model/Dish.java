@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Dish extends NamedEntity {
     private int price;
 
     @Schema(accessMode = Schema.AccessMode.READ_WRITE, example = "2026-08-31")
+    @NotNull
     @Column(name = "menu_date", nullable = false)
     private LocalDate menuDate;
 

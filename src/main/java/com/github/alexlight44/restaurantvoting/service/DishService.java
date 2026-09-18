@@ -34,9 +34,6 @@ public class DishService {
     @CacheEvict(value = "restaurants", allEntries = true)
     public Dish create(Dish dish, int restaurantId) {
         dish.setRestaurant(restaurantService.get(restaurantId));
-        if (dish.getMenuDate() == null) {
-            dish.setMenuDate(LocalDate.now(clock));
-        }
         return dishRepository.save(dish);
     }
 
@@ -49,9 +46,6 @@ public class DishService {
             throw new DataConflictException("Dish id=" + id + " doesn't belong to restaurant id=" + restaurantId);
         }
         dish.setRestaurant(restaurant);
-        if (dish.getMenuDate() == null) {
-            dish.setMenuDate(oldDish.getMenuDate());
-        }
         dishRepository.save(dish);
     }
 
