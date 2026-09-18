@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.github.alexlight44.restaurantvoting.model.Dish;
 import com.github.alexlight44.restaurantvoting.service.DishService;
+import com.github.alexlight44.restaurantvoting.validation.ValidationUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,6 +38,7 @@ public class AdminDishController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create dish (menuDate defaults to today)")
     public Dish create(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
+        ValidationUtil.checkNew(dish);
         return dishService.create(dish, restaurantId);
     }
 
@@ -44,6 +46,7 @@ public class AdminDishController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Update dish")
     public void update(@Valid @RequestBody Dish dish, @PathVariable int restaurantId, @PathVariable int id) {
+        ValidationUtil.assureIdConsistent(dish, id);
         dishService.update(dish, id, restaurantId);
     }
 

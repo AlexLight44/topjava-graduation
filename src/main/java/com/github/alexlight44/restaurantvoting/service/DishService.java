@@ -10,7 +10,6 @@ import com.github.alexlight44.restaurantvoting.model.Dish;
 import com.github.alexlight44.restaurantvoting.model.Restaurant;
 import com.github.alexlight44.restaurantvoting.repository.DishRepository;
 import com.github.alexlight44.restaurantvoting.repository.RestaurantRepository;
-import com.github.alexlight44.restaurantvoting.validation.ValidationUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -35,7 +34,6 @@ public class DishService {
     @Transactional
     @CacheEvict(value = "restaurants", allEntries = true)
     public Dish create(Dish dish, int restaurantId) {
-        ValidationUtil.checkNew(dish);
         dish.setRestaurant(getRestaurant(restaurantId));
         if (dish.getMenuDate() == null) {
             dish.setMenuDate(LocalDate.now(clock));
@@ -46,7 +44,6 @@ public class DishService {
     @Transactional
     @CacheEvict(value = "restaurants", allEntries = true)
     public void update(Dish dish, int id, int restaurantId) {
-        ValidationUtil.assureIdConsistent(dish, id);
         Restaurant restaurant = getRestaurant(restaurantId);
         Dish db = get(id);
         if (!db.getRestaurant().getId().equals(restaurantId)) {

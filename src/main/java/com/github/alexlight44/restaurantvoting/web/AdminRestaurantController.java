@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.github.alexlight44.restaurantvoting.model.Restaurant;
 import com.github.alexlight44.restaurantvoting.service.RestaurantService;
+import com.github.alexlight44.restaurantvoting.validation.ValidationUtil;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class AdminRestaurantController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create restaurant")
     public Restaurant create(@Valid @RequestBody Restaurant restaurant) {
+        ValidationUtil.checkNew(restaurant);
         return restaurantService.create(restaurant);
     }
 
@@ -44,6 +46,7 @@ public class AdminRestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Update restaurant")
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
+        ValidationUtil.assureIdConsistent(restaurant, id);
         restaurantService.update(restaurant, id);
     }
 

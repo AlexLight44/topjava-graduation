@@ -12,7 +12,6 @@ import com.github.alexlight44.restaurantvoting.repository.DishRepository;
 import com.github.alexlight44.restaurantvoting.repository.RestaurantRepository;
 import com.github.alexlight44.restaurantvoting.to.DishTo;
 import com.github.alexlight44.restaurantvoting.to.RestaurantTo;
-import com.github.alexlight44.restaurantvoting.validation.ValidationUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -30,7 +29,6 @@ public class RestaurantService {
 
     @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
-        ValidationUtil.checkNew(restaurant);
         return restaurantRepository.save(restaurant);
     }
 
@@ -61,7 +59,6 @@ public class RestaurantService {
     @Transactional
     @CacheEvict(value = "restaurants", allEntries = true)
     public void update(Restaurant restaurant, int id) {
-        ValidationUtil.assureIdConsistent(restaurant, id);
         get(id);
         restaurantRepository.save(restaurant);
     }
