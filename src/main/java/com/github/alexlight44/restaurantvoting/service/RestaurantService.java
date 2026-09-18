@@ -5,13 +5,13 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.github.alexlight44.restaurantvoting.error.NotFoundException;
 import com.github.alexlight44.restaurantvoting.model.Dish;
 import com.github.alexlight44.restaurantvoting.model.Restaurant;
 import com.github.alexlight44.restaurantvoting.repository.DishRepository;
 import com.github.alexlight44.restaurantvoting.repository.RestaurantRepository;
 import com.github.alexlight44.restaurantvoting.to.DishTo;
 import com.github.alexlight44.restaurantvoting.to.RestaurantTo;
+import com.github.alexlight44.restaurantvoting.validation.ValidationUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -33,8 +33,7 @@ public class RestaurantService {
     }
 
     public Restaurant get(int id) {
-        return restaurantRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Restaurant id=" + id + " not found"));
+        return ValidationUtil.checkFound(restaurantRepository.findById(id), "Restaurant id=" + id + " not found");
     }
 
     public List<Restaurant> getAll() {

@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.github.alexlight44.restaurantvoting.error.DataConflictException;
-import com.github.alexlight44.restaurantvoting.error.NotFoundException;
 import com.github.alexlight44.restaurantvoting.model.Restaurant;
 import com.github.alexlight44.restaurantvoting.model.User;
 import com.github.alexlight44.restaurantvoting.model.Vote;
 import com.github.alexlight44.restaurantvoting.repository.VoteRepository;
 import com.github.alexlight44.restaurantvoting.to.VoteTo;
+import com.github.alexlight44.restaurantvoting.validation.ValidationUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -40,8 +40,8 @@ public class VoteService {
     @Transactional
     public void updateToday(User user, int restaurantId) {
         Restaurant restaurant = restaurantService.get(restaurantId);
-        Vote vote = voteRepository.findByUserAndVoteDate(user, LocalDate.now(clock))
-                .orElseThrow(() -> new NotFoundException("Vote for today not found"));
+        Vote vote = ValidationUtil.checkFound(voteRepository.findByUserAndVoteDate(user, LocalDate.now(clock)),
+                "Vote for today not found");
         if (LocalTime.now(clock).isAfter(DEADLINE)) {
             throw new DataConflictException("Vote cannot be changed after 11:00");
         }

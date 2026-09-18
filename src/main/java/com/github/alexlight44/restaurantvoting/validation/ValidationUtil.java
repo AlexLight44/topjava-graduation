@@ -3,6 +3,9 @@ package com.github.alexlight44.restaurantvoting.validation;
 import lombok.experimental.UtilityClass;
 import com.github.alexlight44.restaurantvoting.model.HasId;
 import com.github.alexlight44.restaurantvoting.error.IllegalRequestDataException;
+import com.github.alexlight44.restaurantvoting.error.NotFoundException;
+
+import java.util.Optional;
 
 @UtilityClass
 public class ValidationUtil {
@@ -19,5 +22,9 @@ public class ValidationUtil {
         } else if (bean.id() != id) {
             throw new IllegalRequestDataException(bean.getClass().getSimpleName() + " must has id=" + id);
         }
+    }
+
+    public static <T> T checkFound(Optional<T> optional, String msg) {
+        return optional.orElseThrow(() -> new NotFoundException(msg));
     }
 }
