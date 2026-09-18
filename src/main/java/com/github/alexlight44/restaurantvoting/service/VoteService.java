@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class VoteService {
 
     public static final LocalTime DEADLINE = LocalTime.of(11, 0);

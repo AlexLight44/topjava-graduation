@@ -22,14 +22,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final DishRepository dishRepository;
     private final Clock clock;
 
-    @Transactional
     @CacheEvict(value = "restaurants", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
         ValidationUtil.checkNew(restaurant);
@@ -45,6 +43,7 @@ public class RestaurantService {
         return restaurantRepository.findAllByOrderByName();
     }
 
+    @Transactional(readOnly = true)
     @Cacheable("restaurants")
     public List<RestaurantTo> getAllWithTodayMenu() {
         LocalDate today = LocalDate.now(clock);
