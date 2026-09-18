@@ -52,7 +52,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_MATCHER.contentJson(vote1()));
+                .andExpect(VOTE_MATCHER.contentJson(vote1(clock)));
     }
 
     @Test
@@ -74,7 +74,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void vote() throws Exception {
-        VoteTo newVote = getNew();
+        VoteTo newVote = getNew(clock);
         ResultActions action = perform(votePost(RESTAURANT1_ID))
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -87,7 +87,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
-                .andExpect(VOTE_MATCHER.contentJson(created, vote1()));
+                .andExpect(VOTE_MATCHER.contentJson(created, vote1(clock)));
     }
 
     @Test
