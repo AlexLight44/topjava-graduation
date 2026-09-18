@@ -44,13 +44,13 @@ public class DishService {
     @CacheEvict(value = "restaurants", allEntries = true)
     public void update(Dish dish, int id, int restaurantId) {
         Restaurant restaurant = restaurantService.get(restaurantId);
-        Dish db = get(id);
-        if (!db.getRestaurant().getId().equals(restaurantId)) {
+        Dish oldDish = get(id);
+        if (!oldDish.getRestaurant().getId().equals(restaurantId)) {
             throw new DataConflictException("Dish id=" + id + " doesn't belong to restaurant id=" + restaurantId);
         }
         dish.setRestaurant(restaurant);
         if (dish.getMenuDate() == null) {
-            dish.setMenuDate(db.getMenuDate());
+            dish.setMenuDate(oldDish.getMenuDate());
         }
         dishRepository.save(dish);
     }
@@ -58,8 +58,8 @@ public class DishService {
     @Transactional
     @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(int id, int restaurantId) {
-        Dish db = get(id);
-        if (!db.getRestaurant().getId().equals(restaurantId)) {
+        Dish oldDish = get(id);
+        if (!oldDish.getRestaurant().getId().equals(restaurantId)) {
             throw new DataConflictException("Dish id=" + id + " doesn't belong to restaurant id=" + restaurantId);
         }
         dishRepository.deleteById(id);
