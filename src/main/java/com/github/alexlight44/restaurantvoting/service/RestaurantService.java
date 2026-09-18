@@ -15,6 +15,7 @@ import com.github.alexlight44.restaurantvoting.validation.ValidationUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,11 +46,12 @@ public class RestaurantService {
     public List<RestaurantTo> getAllWithTodayMenu() {
         LocalDate today = LocalDate.now(clock);
         List<Restaurant> restaurants = restaurantRepository.findAllByOrderByName();
-        Map<Integer, List<Dish>> dishesByRestaurant = dishRepository.findByMenuDateOrderByName(today).stream()
+        Map<Integer, List<Dish>> dishesByRestaurant = dishRepository.findByMenuDate(today).stream()
                 .collect(Collectors.groupingBy(d -> d.getRestaurant().getId()));
         return restaurants.stream()
                 .map(r -> new RestaurantTo(r.getId(), r.getName(),
                         dishesByRestaurant.getOrDefault(r.getId(), List.of()).stream()
+                                .sorted(Comparator.comparing(Dish::getName))
                                 .map(d -> new DishTo(d.getId(), d.getName(), d.getPrice()))
                                 .toList()))
                 .toList();
