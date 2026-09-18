@@ -13,6 +13,7 @@ import com.github.alexlight44.restaurantvoting.validation.ValidationUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -40,9 +41,10 @@ public class VoteService {
     @Transactional
     public void updateToday(User user, int restaurantId) {
         Restaurant restaurant = restaurantService.get(restaurantId);
-        Vote vote = ValidationUtil.checkFound(voteRepository.findByUserAndVoteDate(user, LocalDate.now(clock)),
+        LocalDateTime now = LocalDateTime.now(clock);
+        Vote vote = ValidationUtil.checkFound(voteRepository.findByUserAndVoteDate(user, now.toLocalDate()),
                 "Vote for today not found");
-        if (LocalTime.now(clock).isAfter(DEADLINE)) {
+        if (now.toLocalTime().isAfter(DEADLINE)) {
             throw new DataConflictException("Vote cannot be changed after 11:00");
         }
         vote.setRestaurant(restaurant);
