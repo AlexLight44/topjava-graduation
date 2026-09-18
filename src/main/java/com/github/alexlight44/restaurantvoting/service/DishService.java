@@ -9,7 +9,6 @@ import com.github.alexlight44.restaurantvoting.error.NotFoundException;
 import com.github.alexlight44.restaurantvoting.model.Dish;
 import com.github.alexlight44.restaurantvoting.model.Restaurant;
 import com.github.alexlight44.restaurantvoting.repository.DishRepository;
-import com.github.alexlight44.restaurantvoting.repository.RestaurantRepository;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -20,7 +19,7 @@ import java.util.List;
 public class DishService {
 
     private final DishRepository dishRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
     private final Clock clock;
 
     public List<Dish> getMenu(int restaurantId, LocalDate menuDate) {
@@ -34,7 +33,7 @@ public class DishService {
     @Transactional
     @CacheEvict(value = "restaurants", allEntries = true)
     public Dish create(Dish dish, int restaurantId) {
-        dish.setRestaurant(getRestaurant(restaurantId));
+        dish.setRestaurant(restaurantService.get(restaurantId));
         if (dish.getMenuDate() == null) {
             dish.setMenuDate(LocalDate.now(clock));
         }
@@ -44,7 +43,7 @@ public class DishService {
     @Transactional
     @CacheEvict(value = "restaurants", allEntries = true)
     public void update(Dish dish, int id, int restaurantId) {
-        Restaurant restaurant = getRestaurant(restaurantId);
+        Restaurant restaurant = restaurantService.get(restaurantId);
         Dish db = get(id);
         if (!db.getRestaurant().getId().equals(restaurantId)) {
             throw new DataConflictException("Dish id=" + id + " doesn't belong to restaurant id=" + restaurantId);
@@ -69,10 +68,5 @@ public class DishService {
     private Dish get(int id) {
         return dishRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Dish id=" + id + " not found"));
-    }
-
-    private Restaurant getRestaurant(int restaurantId) {
-        return restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + " not found"));
     }
 }

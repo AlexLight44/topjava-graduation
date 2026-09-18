@@ -8,7 +8,6 @@ import com.github.alexlight44.restaurantvoting.error.NotFoundException;
 import com.github.alexlight44.restaurantvoting.model.Restaurant;
 import com.github.alexlight44.restaurantvoting.model.User;
 import com.github.alexlight44.restaurantvoting.model.Vote;
-import com.github.alexlight44.restaurantvoting.repository.RestaurantRepository;
 import com.github.alexlight44.restaurantvoting.repository.VoteRepository;
 import com.github.alexlight44.restaurantvoting.to.VoteTo;
 
@@ -25,12 +24,12 @@ public class VoteService {
     public static final LocalTime DEADLINE = LocalTime.of(11, 0);
 
     private final VoteRepository voteRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
     private final Clock clock;
 
     @Transactional
     public VoteTo create(User user, int restaurantId) {
-        Restaurant restaurant = getRestaurant(restaurantId);
+        Restaurant restaurant = restaurantService.get(restaurantId);
         LocalDate today = LocalDate.now(clock);
         if (voteRepository.findByUserAndVoteDate(user, today).isPresent()) {
             throw new DataConflictException("Vote for today already exists");
@@ -40,7 +39,7 @@ public class VoteService {
 
     @Transactional
     public void updateToday(User user, int restaurantId) {
-        Restaurant restaurant = getRestaurant(restaurantId);
+        Restaurant restaurant = restaurantService.get(restaurantId);
         Vote vote = voteRepository.findByUserAndVoteDate(user, LocalDate.now(clock))
                 .orElseThrow(() -> new NotFoundException("Vote for today not found"));
         if (LocalTime.now(clock).isAfter(DEADLINE)) {
@@ -48,11 +47,6 @@ public class VoteService {
         }
         vote.setRestaurant(restaurant);
         voteRepository.save(vote);
-    }
-
-    private Restaurant getRestaurant(int restaurantId) {
-        return restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new NotFoundException("Restaurant id=" + restaurantId + " not found"));
     }
 
     public Optional<VoteTo> getTodayVote(User user) {
