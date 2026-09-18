@@ -45,7 +45,7 @@ public class VoteService {
         Vote vote = ValidationUtil.checkFound(voteRepository.findByUserAndVoteDate(user, now.toLocalDate()),
                 "Vote for today not found");
         if (now.toLocalTime().isAfter(DEADLINE)) {
-            throw new DataConflictException("Vote cannot be changed after 11:00");
+            throw new DataConflictException("Vote cannot be changed after " + DEADLINE);
         }
         vote.setRestaurant(restaurant);
         voteRepository.save(vote);
