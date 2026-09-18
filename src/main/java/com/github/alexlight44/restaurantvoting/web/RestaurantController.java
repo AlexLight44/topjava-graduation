@@ -22,8 +22,8 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     @GetMapping
-    @Operation(summary = "Get restaurants with today's menus")
+    @Operation(summary = "Get restaurants with today's dishes")
     public List<RestaurantTo> getAll() {
-        return restaurantService.getAllWithTodayMenu();
+        return restaurantService.getAllWithTodayDishes();
     }
 }

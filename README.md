@@ -6,7 +6,7 @@ REST API for deciding where to have lunch. No frontend.
 
 - Users vote for a restaurant for today (one vote per user per day).
 - A vote can be changed until 11:00; after that it is final.
-- Admins manage restaurants and daily menus (dish name + price in kopecks).
+- Admins manage restaurants and dishes (name + price in kopecks, for a date).
 
 ## Stack
 
@@ -29,7 +29,7 @@ Admin: admin@gmail.com / admin
 
 ## curl
 
-Restaurants with today's menus:
+Restaurants with today's dishes:
 
 ```
 curl -u user@yandex.ru:password http://localhost:8080/api/restaurants

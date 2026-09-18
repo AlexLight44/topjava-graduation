@@ -26,12 +26,12 @@ public class AdminDishController {
     private final DishService dishService;
 
     @GetMapping
-    @Operation(summary = "Get restaurant menu for a date (today if omitted)")
-    public List<Dish> getMenu(@PathVariable int restaurantId,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                              Optional<LocalDate> date) {
-        return date.map(d -> dishService.getMenu(restaurantId, d))
-                .orElseGet(() -> dishService.getTodayMenu(restaurantId));
+    @Operation(summary = "Get restaurant dishes for a date (today if omitted)")
+    public List<Dish> getDishes(@PathVariable int restaurantId,
+                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                Optional<LocalDate> date) {
+        return date.map(d -> dishService.getDishes(restaurantId, d))
+                .orElseGet(() -> dishService.getTodayDishes(restaurantId));
     }
 
     @PostMapping

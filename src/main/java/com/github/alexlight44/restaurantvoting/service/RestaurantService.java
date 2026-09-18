@@ -43,7 +43,7 @@ public class RestaurantService {
 
     @Transactional(readOnly = true)
     @Cacheable(value = "restaurants", key = "T(java.time.LocalDate).now(@clock)")
-    public List<RestaurantTo> getAllWithTodayMenu() {
+    public List<RestaurantTo> getAllWithTodayDishes() {
         LocalDate today = LocalDate.now(clock);
         List<Restaurant> restaurants = restaurantRepository.findAllByOrderByName();
         Map<Integer, List<Dish>> dishesByRestaurant = dishRepository.findByMenuDate(today).stream()

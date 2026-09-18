@@ -24,13 +24,13 @@ class RestaurantCacheTest extends AbstractControllerTest {
     private RestaurantService restaurantService;
 
     @Test
-    void getAllWithTodayMenuDoesNotReuseCacheAfterDateChange() {
+    void getAllWithTodayDishesDoesNotReuseCacheAfterDateChange() {
         clock.setDate(LocalDate.now());
-        List<RestaurantTo> today = restaurantService.getAllWithTodayMenu();
+        List<RestaurantTo> today = restaurantService.getAllWithTodayDishes();
         assertTrue(today.stream().anyMatch(r -> !r.getDishes().isEmpty()));
 
         clock.setDate(LocalDate.now().plusDays(1));
-        List<RestaurantTo> nextDay = restaurantService.getAllWithTodayMenu();
+        List<RestaurantTo> nextDay = restaurantService.getAllWithTodayDishes();
         assertTrue(nextDay.stream().allMatch(r -> r.getDishes().isEmpty()));
         assertFalse(today.equals(nextDay));
     }

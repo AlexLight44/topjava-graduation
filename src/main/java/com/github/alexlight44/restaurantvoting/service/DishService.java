@@ -22,12 +22,12 @@ public class DishService {
     private final RestaurantService restaurantService;
     private final Clock clock;
 
-    public List<Dish> getMenu(int restaurantId, LocalDate menuDate) {
-        return dishRepository.findByRestaurantIdAndMenuDateOrderByName(restaurantId, menuDate);
+    public List<Dish> getDishes(int restaurantId, LocalDate date) {
+        return dishRepository.findByRestaurantIdAndMenuDateOrderByName(restaurantId, date);
     }
 
-    public List<Dish> getTodayMenu(int restaurantId) {
-        return getMenu(restaurantId, LocalDate.now(clock));
+    public List<Dish> getTodayDishes(int restaurantId) {
+        return getDishes(restaurantId, LocalDate.now(clock));
     }
 
     @Transactional
